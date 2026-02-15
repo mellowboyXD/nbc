@@ -116,26 +116,24 @@ word_freq *find_key(word_freqs *freqs, string_view key)
 	return NULL;
 }
 
-char *shift_argv(char **argv, int *argc)
+char *shift_argv(char **argv, int argc)
 {
 	static int i = 0;
-	if (*argc < i)
+	if (argc < i)
 		return NULL;
 
-	(*argc)--;
-	char *ret = argv[i++];
-	return ret;
+	return argv[i++];
 }
 
 int main(int argc, char **argv)
 {
-	const char *program_name = shift_argv(argv, &argc);
-	if (argc < 1) {
+	const char *program_name = shift_argv(argv, argc);
+	if (argc < 2) {
 		fprintf(stderr, "Usage: %s <input-file>.txt\n", program_name);
 		return 1;
 	}
 
-	const char *filepath = shift_argv(argv, &argc);
+	const char *filepath = shift_argv(argv, argc);
 	string_builder buf = { 0 };
 	if (!read_entire_file(filepath, &buf))
 		return 1;
