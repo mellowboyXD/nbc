@@ -11,3 +11,4 @@ motivated me to implement my own version of the spam filtering algorithm.
 - https://github.com/tsoding/sv/
 - https://en.wikipedia.org/wiki/Naive_Bayes_classifier
 - https://www2.aueb.gr/users/ion/docs/ceas2006_paper.pdf
+- https://www2.aueb.gr/users/ion/data/enron-spam/
