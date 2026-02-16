@@ -116,24 +116,25 @@ word_freq *find_key(word_freqs *freqs, string_view key)
 	return NULL;
 }
 
-char *shift_argv(char **argv, int argc)
+/* shift_argv: left shifts argv by 1 and returns a pointer to the shifted 
+ * 		string */
+char *shift_argv(char **argv[], int *argc)
 {
-	static int i = 0;
-	if (argc < i)
-		return NULL;
-
-	return argv[i++];
+	assert(*argc > 0);
+	(*argc)--;
+	return *((*argv)++);
 }
 
 int main(int argc, char **argv)
 {
-	const char *program_name = shift_argv(argv, argc);
-	if (argc < 2) {
+	const char *program_name = shift_argv(&argv, &argc);
+	if (argc < 1) {
 		fprintf(stderr, "Usage: %s <input-file>.txt\n", program_name);
-		return 1;
+		return 2;
 	}
 
-	const char *filepath = shift_argv(argv, argc);
+	const char *filepath = shift_argv(&argv, &argc);
+
 	string_builder buf = { 0 };
 	if (!read_entire_file(filepath, &buf))
 		return 1;
@@ -145,7 +146,6 @@ int main(int argc, char **argv)
 	for (size_t i = 0; i < content.size; i++) {
 		content = trim_left(content);
 		string_view token = chop_by_space(&content);
-		//printf("|%.*s|\n", (int)token.count, token.data);
 		word_freq *freq = find_key(&freqs, token);
 		if (freq) {
 			freq->count += 1;
@@ -160,8 +160,7 @@ int main(int argc, char **argv)
 		word_freq freq = freqs.items[i];
 		int n = (int)freq.word.size;
 		float p = (float)freq.count / total_count;
-		printf("|%.*s| => %d (%.5f)\n", n, freq.word.cstr, freq.count,
-		       p);
+		printf("|%.*s| => %f\n", n, freq.word.cstr, p);
 	}
 
 	da_free(&buf);
