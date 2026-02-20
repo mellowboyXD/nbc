@@ -1,2 +1,4 @@
 -Wall -Wextra -pedantic
+-I/usr/include
+-D_XOPEN_SOURCE=700
 -std=c23
